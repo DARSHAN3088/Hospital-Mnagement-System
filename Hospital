@@ -1,0 +1,223 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define structures for data
+typedef struct {
+    int id;
+    char name[50];
+    int age;
+    char gender[10];
+    char diagnosis[100];
+} Patient;
+
+typedef struct {
+    int id;
+    char name[50];
+    char specialization[50];
+    int experience; // years of experience
+} Doctor;
+
+typedef struct {
+    int id;
+    int patient_id;
+    int doctor_id;
+    char date[20]; // Appointment date
+} Appointment;
+
+// Function prototypes
+void addPatient();
+void viewPatients();
+void addDoctor();
+void viewDoctors();
+void scheduleAppointment();
+void viewAppointments();
+void generateBill();
+
+// Main function
+int main() {
+    int choice;
+    do {
+        printf("\nHospital Management System\n");
+        printf("1. Add Patient\n");
+        printf("2. View Patients\n");
+        printf("3. Add Doctor\n");
+        printf("4. View Doctors\n");
+        printf("5. Schedule Appointment\n");
+        printf("6. View Appointments\n");
+        printf("7. Generate Bill\n");
+        printf("8. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addPatient();
+                break;
+            case 2:
+                viewPatients();
+                break;
+            case 3:
+                addDoctor();
+                break;
+            case 4:
+                viewDoctors();
+                break;
+            case 5:
+                scheduleAppointment();
+                break;
+            case 6:
+                viewAppointments();
+                break;
+            case 7:
+                generateBill();
+                break;
+            case 8:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    } while (choice != 8);
+
+    return 0;
+}
+
+// Function definitions
+    // Code to add a new patient
+void addPatient() 
+{
+    Patient newPatient;
+    FILE *fp;
+
+    fp = fopen("patients.txt", "a");
+
+    printf("Enter Patient ID: ");
+    scanf("%d", &newPatient.id);
+    printf("Enter Name: ");
+    scanf("%s", newPatient.name);
+    printf("Enter Age: ");
+    scanf("%d", &newPatient.age);
+    printf("Enter Gender: ");
+    scanf("%s", newPatient.gender);
+    printf("Enter Diagnosis: ");
+    scanf("%s", newPatient.diagnosis);
+
+    fprintf(fp, "%d %s %d %s %s\n", newPatient.id, newPatient.name, newPatient.age, newPatient.gender, newPatient.diagnosis);
+    fclose(fp);
+
+    printf("Patient added successfully.\n");
+}
+
+    // Code to view all patients
+void viewPatients()
+	 {
+    Patient patient;
+    FILE *fp;
+
+    fp = fopen("patients.txt", "r");
+    if (fp == NULL) {
+        printf("No patient records found.\n");
+        return;
+    }
+
+    printf("\nID\tName\tAge\tGender\tDiagnosis\n");
+    while (fscanf(fp, "%d %s %d %s %s\n", &patient.id, patient.name, &patient.age, patient.gender, patient.diagnosis) != EOF) {
+        printf("%d\t%s\t%d\t%s\t%s\n", patient.id, patient.name, patient.age, patient.gender, patient.diagnosis);
+    }
+
+    fclose(fp);
+}
+
+
+
+
+    // Code to add a new doctor
+//    
+void addDoctor() {
+    Doctor newDoctor;
+    FILE *fp;
+
+    fp = fopen("doctors.txt", "a");
+
+    printf("Enter Doctor ID: ");
+    scanf("%d", &newDoctor.id);
+    printf("Enter Name: ");
+    scanf("%s", newDoctor.name);
+    printf("Enter Specialization: ");
+    scanf("%s", newDoctor.specialization);
+    printf("Enter Years of Experience: ");
+    scanf("%d", &newDoctor.experience);
+
+    fprintf(fp, "%d %s %s %d\n", newDoctor.id, newDoctor.name, newDoctor.specialization, newDoctor.experience);
+    fclose(fp);
+
+    printf("Doctor added successfully.\n");
+}
+void viewDoctors() {
+    Doctor doctor;
+    FILE *fp;
+
+    fp = fopen("doctors.txt", "r");
+    if (fp == NULL) {
+        printf("No doctor records found.\n");
+        return;
+    }
+
+    printf("\nID\tName\tSpecialization\tExperience\n");
+    while (fscanf(fp, "%d %s %s %d\n", &doctor.id, doctor.name, doctor.specialization, &doctor.experience) != EOF) {
+        printf("%d\t%s\t%s\t%d\n", doctor.id, doctor.name, doctor.specialization, doctor.experience);
+    }
+
+    fclose(fp);
+}
+void scheduleAppointment() {
+    Appointment newAppointment;
+    FILE *fp;
+
+    fp = fopen("appointments.txt", "a");
+
+    printf("Enter Appointment ID: ");
+    scanf("%d", &newAppointment.id);
+    printf("Enter Patient ID: ");
+    scanf("%d", &newAppointment.patient_id);
+    printf("Enter Doctor ID: ");
+    scanf("%d", &newAppointment.doctor_id);
+    printf("Enter Date (dd-mm-yyyy): ");
+    scanf("%s", newAppointment.date);
+
+    fprintf(fp, "%d %d %d %s\n", newAppointment.id, newAppointment.patient_id, newAppointment.doctor_id, newAppointment.date);
+    fclose(fp);
+
+    printf("Appointment scheduled successfully.\n");
+}
+void viewAppointments() {
+    Appointment appointment;
+    FILE *fp;
+
+    fp = fopen("appointments.txt", "r");
+    if (fp == NULL) {
+        printf("No appointment records found.\n");
+        return;
+    }
+
+    printf("\nID\tPatient ID\tDoctor ID\tDate\n");
+    while (fscanf(fp, "%d %d %d %s\n", &appointment.id, &appointment.patient_id, &appointment.doctor_id, appointment.date) != EOF) {
+        printf("%d\t%d\t%d\t%s\n", appointment.id, appointment.patient_id, appointment.doctor_id, appointment.date);
+    }
+
+    fclose(fp);
+}
+void generateBill() {
+    int patient_id;
+    float consultation_fee = 50.0; // example fee
+    float total;
+
+    printf("Enter Patient ID for billing: ");
+    scanf("%d", &patient_id);
+
+    // Here you can add code to fetch patient details and calculate total charges
+    total = consultation_fee; // For now, just the consultation fee
+
+    printf("Total Bill for Patient ID %d: $%.2f\n", patient_id, total);
+}
